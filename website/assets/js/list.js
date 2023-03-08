@@ -12384,6 +12384,18 @@ function getDataOnChain() {
                 })
                 .then((total_participants) => {
                     data[index]['total_participants'] = total_participants;
+                    return contract.methods.start_time(index).call();
+                })
+                .then((start_time) => {
+                    data[index]['start_time'] = start_time;
+                    return contract.methods.duration_time(index).call();
+                })
+                .then((duration_time) => {
+                    data[index]['duration_time'] = duration_time;
+                    return contract.methods.auditing_contracts(index).call();
+                })
+                .then((auditing_contract) => {
+                    data[index]['auditing_contract'] = auditing_contract;
                     index = index + 1;
                     if (index <= total_pool) return getData(index);
                 })
@@ -12420,26 +12432,46 @@ function showdata() {
         if(data[i]['is_pool_hacked'] == 1) $("#c" + i).append(`<td>hacked</td>`);
         else if(data[i]['is_pool_ended'] == 1) $("#c" + i).append(`<td>closed</td>`);
         else $("#c" + i).append(`<td>active</td>`);
-        $("#c" + i).append(`<td>${data[i]['init_amount']}</td>`);
-        $("#c" + i).append(`<td>${parseFloat(data[i]['init_amount'])+parseFloat(data[i]['pool_amount'])}</td>`);
+        $("#c" + i).append(`<td>${parseFloat(data[i]['init_amount'] / 1000000000000000000)}</td>`);
+        $("#c" + i).append(`<td>${parseFloat(data[i]['pool_amount'] / 1000000000000000000)}</td>`);
         $("#c" + i).append(`<td>${data[i]['total_participants']}</td>`);
+        var end_date = new Date((parseInt(data[i]['start_time']) + parseInt(data[i]['duration_time'])) * 1000);
+        $("#c" + i).append(`<td>${end_date.toLocaleString()}</td>`)
         $("#c" + i).append(`<td><a id="b${i}" class="button alt small info">查看詳情</a></td>`);
         if (isinfo.has(i)) {
-            $("tbody").append(`
+            if(data[i]['is_pool_ended'] == 1){
+                if(data[i]['is_pool_hacked'] == 1){
+                    $("tbody").append(`
+                    <tr id="cool">
+                        <td colspan="${7}">
+                                <p>智能合約地址：${data[i]['auditing_contract']}</p>
+                                <p><a href="https://goerli.etherscan.io/address/${data[i]['auditing_contract']}">在Etherscan中查看</a></p>
+                            <a id="btn_invest${i}" class="button disabled alt small invest">入金</a>
+                            <a id="btn_claim${i}" class="button disabled alt small claim">領取</a>
+                        </td>
+                    </tr>`);
+                }else{
+                    $("tbody").append(`
+                    <tr id="cool">
+                        <td colspan="${7}">
+                                <p>智能合約地址：${data[i]['auditing_contract']}</p>
+                                <p><a href="https://goerli.etherscan.io/address/${data[i]['auditing_contract']}">在Etherscan中查看</a></p>
+                            <a id="btn_invest${i}" class="button disabled alt small invest">入金</a>
+                            <a id="btn_claim${i}" class="button alt small claim">領取</a>
+                        </td>
+                    </tr>`);
+                }
+            }else{
+                $("tbody").append(`
                 <tr id="cool">
-                    <td colspan="${6}">
-                        <ol>
-                            <li>編號：</li>
-                            <li>項目描述：</li>
-                            <li>原獎池：</li>
-                            <li>項目方姓名：</li>
-                            <li>項目方Email：</li>
-                            <li>智能合約地址：</li>
-                        </ol>
-                        <a id="h${i}" class="button alt small hack">破解</a>
-                        <a id="i${i}" class="button alt small invest">入金</a>
+                    <td colspan="${7}">
+                            <p>智能合約地址：${data[i]['auditing_contract']}</p>
+                            <p><a href="https://goerli.etherscan.io/address/${data[i]['auditing_contract']}">在Etherscan中查看</a></p>
+                        <a id="btn_invest${i}" class="button alt small invest">入金</a>
+                        <a id="btn_claim${i}" class="button disabled alt small claim">領取</a>
                     </td>
                 </tr>`);
+            }
         }
     }
 }
@@ -12454,21 +12486,6 @@ $("#search").on('click', function () {
     }, 500);
     getDataOnChain().then((_data) => {
         onChainData = _data;
-        /*
-        active=[0];
-        closed=[0];
-        hacked=[0];
-        for (var i = 1; i < onChainData.length; i++) {
-            onChainData[i]['pool_amount'] /= 1000000000000000000;
-            if(onChainData[i]['pool_state']=="active"){
-                active[active.length+1]=onChainData[i];
-            }else if(onChainData[i]['pool_state']=="closed"){
-                closed[closed.length+1]=onChainData[i];
-            }else if(onChainData[i]['pool_state']=="hacked"){
-                hacked[hacked.length+1]=onChainData[i];
-            }
-        }
-        */
         clearInterval(stop);
         $("#search").html("Search");
         showdata();
@@ -12481,11 +12498,16 @@ $('tbody').on('click', '.info', function () {
     showdata();
 });
 
-function EncodeTransactionData(pool_id) {
+function EncodeTransactionData1(pool_id) {
     const addEtherIntoPool_ID = "6037bc62";
     //translate pool_id (type:uint256) into byte code
     pool_id = pool_id.toString(16).padStart(64, "0");
     return "0x" + addEtherIntoPool_ID + pool_id;
+}
+function EncodeTransactionData2(pool_id) {
+    const claimReward_ID = "0xae169a5";
+    pool_id = pool_id.toString(16).padStart(64, "0");
+    return "0x" + claimReward_ID + pool_id;
 }
 
 async function invest(money, pool_id) {
@@ -12496,10 +12518,10 @@ async function invest(money, pool_id) {
         } else {
             //encode data
             console.log("pool_id (dec) = " + pool_id);
-            var transaction_data = EncodeTransactionData(pool_id);
+            var transaction_data = EncodeTransactionData1(pool_id);
             console.log("transaction_data (encoded) = " + transaction_data);
             var sender_address = accounts[0];
-            var receiver_address = "0xA3DDB347b3160Dc52643b4c83Bf5779b953BcB67";
+            var receiver_address = contract_address;
             var value = money * 1000000000000000000;
             value = "0x" + value.toString(16);
 
@@ -12537,14 +12559,61 @@ async function invest(money, pool_id) {
         console.log("Fail to connect to ethereum");
     }
 }
+
+async function claim(pool_id) {
+    if (ethereum.isConnected()) {
+        let accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+        if (accounts.length <= 0) {
+            window.alert("Please retry to login MetaMask");
+        } else {
+            //encode data
+            console.log("pool_id (dec) = " + pool_id);
+            var transaction_data = EncodeTransactionData2(pool_id);
+            console.log("transaction_data (encoded) = " + transaction_data);
+            var sender_address = accounts[0];
+            var receiver_address = contract_address;
+
+            //sendTransaction and call addEtherIntoPool function
+            ethereum
+                .request({
+                    method: 'eth_sendTransaction',
+                    params: [
+                        {
+                            from: sender_address,
+                            to: receiver_address,
+                            data: transaction_data
+                        },
+                    ],
+                })
+                .then((txHash) => {
+                    console.log("Transaction_send Successfully");
+                    console.log("Transactoin Hash : " + txHash);
+                    console.log("From : " + sender_address);
+                    console.log("To : " + receiver_address);
+                    console.log("data : " + transaction_data);
+                })
+                .catch((error) => {
+                    console.error(error);
+                    if (error.code == 4001) {
+                        window.alert("Rejected By User");
+                        console.log("send trancation failed due to user rejection");
+                    }
+                });
+        }
+    } else {
+        window.alert("Cannot connect to ethereum");
+        console.log("Fail to connect to ethereum");
+    }
+}
+
 $('tbody').on('click', '.invest', function () {
     var money = prompt("你要入多少金(ETH)", "0.01");
     if(money==null) return;
-    invest(money, data.length-1-this.id.substring(1));
+    invest(money, this.id.substring(10));
 });
-$('tbody').on('click', '.hack', function () {
-    var report = prompt("請把你的審計報告上傳到網路上並貼上連結", "https://docs.google.com");
-});
+$('tbody').on('click', '.claim', function () {
+    claim(this.id.substring(9));
+})
 $("#all-data").on('click', function(){ state=0;});
 $("#active-data").on('click', function(){ state=1;});
 $("#closed-data").on('click', function(){ state=2;});
@@ -34206,8 +34275,8 @@ var assertIsString = function (input) {
 };
 exports.assertIsString = assertIsString;
 
-}).call(this)}).call(this,{"isBuffer":require("../../../../../AppData/Roaming/npm/node_modules/browserify/node_modules/is-buffer/index.js")})
-},{"../../../../../AppData/Roaming/npm/node_modules/browserify/node_modules/is-buffer/index.js":26,"./internal":177}],176:[function(require,module,exports){
+}).call(this)}).call(this,{"isBuffer":require("../../../../../../AppData/Roaming/npm/node_modules/browserify/node_modules/is-buffer/index.js")})
+},{"../../../../../../AppData/Roaming/npm/node_modules/browserify/node_modules/is-buffer/index.js":26,"./internal":177}],176:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
