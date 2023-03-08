@@ -12607,12 +12607,16 @@ async function claim(pool_id) {
 }
 
 $('tbody').on('click', '.invest', function () {
+    var pool_id = this.id.substring(10);
+    if(onChainData[pool_id]['is_pool_ended'] == 1) return;
     var money = prompt("你要入多少金(ETH)", "0.01");
     if(money==null) return;
-    invest(money, this.id.substring(10));
+    invest(pool_id);
 });
 $('tbody').on('click', '.claim', function () {
-    claim(this.id.substring(9));
+    var pool_id = this.id.substring(9);
+    if(onChainData[pool_id]['is_pool_ended'] == 0 || onChainData[pool_id]['is_pool_hacked'] == 1) return;
+    claim(pool_id);
 })
 $("#all-data").on('click', function(){ state=0;});
 $("#active-data").on('click', function(){ state=1;});
