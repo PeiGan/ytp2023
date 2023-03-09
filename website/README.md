@@ -12,12 +12,6 @@ sudo apt install node
 
 If you're using windows, just search node and install it.
 
-Then, clone this repo.
-
-```shell
-git clone https://github.com/PeiGan/ytp2023.git
-```
-
 After installation, open terminal and cd to this folder, enter:
 
 ```shell
