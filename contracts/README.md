@@ -63,10 +63,10 @@ This function will check if msg.sender is the same as audited_contract in the in
 
 Please read through the "For contract auditing" section.
 
-Find a way to fail the unit tests inside testContract, and make them trigger contractHacked function in order to get your reward. Try your best!
+Find a way to fail the unit tests inside testContract, and make them trigger contractHacked call in order to get your reward. Try your best!
 
 ### For participants
 
 You can use our website to interact with the smart contract, and this would be enough.
 
-If you're not satisfied, state variables are all set public, and you can use web3.js or other things to get them. Also, the two functions ( addEtherIntoPool() and ClaimReward() ) are the ones you're interacting with.
+If you're not satisfied, state variables are all set public, and you can use web3.js or other things to get them. Also, the two functions ( addEtherIntoPool() and claimReward() ) are the ones you're interacting with.
