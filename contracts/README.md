@@ -39,7 +39,7 @@ We recommend you to call this function (of the aforementioned address of AuditPo
 
 Then, you have to implement this function in your contract (which is inside the AuditingContractInterface.sol):
 
-```solidity!
+```solidity
 function testContract(address receiver) override external;
 ```
 
@@ -47,7 +47,7 @@ Write your own unit tests in this function. When auditors think they have succes
 
 If the tests in this function failed, your contract should call this function (of the aforementioned address of AuditPool):
 
-```solidity=
+```solidity
 function contractHacked(address receiver, uint portion) public;
 ```
 
