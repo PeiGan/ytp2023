@@ -8,4 +8,10 @@ Contains the core smart contract, the interface for contracts to be audited and 
 Our website running on node.js which can interact with smart contracts via MetaMask.
 
 ## Usage
+Clone this repo.
+
+```
+git clone https://github.com/PeiGan/ytp2023.git
+```
+
 Instructions are inside each folders' README.md.
