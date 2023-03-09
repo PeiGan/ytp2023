@@ -21,7 +21,7 @@
 					<ul>
 						<li><a href="index.html">首頁</a></li>
 						<li>
-							<a href="#" class="icon solid fa-angle-down">我是誰</a>
+							<a href="#" class="icon solid fa-angle-down">列表</a>
 							<ul>
 								<li>
 									<a href="#">操作說明</a>
@@ -32,7 +32,6 @@
 									</ul>
 								</li>
 								<li><a href="list.html">待審計合約列表</a></li>
-								<li><a href="contact.html">聯絡我們</a></li>
 							</ul>
 						</li>
 					</ul>
@@ -50,13 +49,14 @@
 						<h3>第一步</h3>
 						<p>把你要審計的智能合約準備好</p>
 						<h3>第二步</h3>
-						<p>在你的智能合約裡面加一個testContract函式，裡面可以裝一些檢查你的合約是否有出狀況的判別式，這個函式將來會讓駭客呼叫，如果呼叫成功就等於你的合約被發現資安漏洞，可以回去修改了。</p>
+						<p>在你的智能合約裡面加一個testContract函式，在這個函式裡測試你的智能合約，讓駭客在他們認為已經成功破解該智能合約時呼叫</p>
 						<h3>第三步</h3>
-						<p>將你的智能合約丟上鏈</p>
+						<p>若testContract中偵測到問題則呼叫contractHacked函式</p>
 						<h3>第四步</h3>
-						<p>呼叫本合約審計社群項目的函式，並把這個合約在鏈上的地址弄給我們</p>
+						<p>部署此智能合約並呼叫initiatePool函式</p>
 						<h3>第五步</h3>
 						<p>靜待你的合約被駭，或參與者願意為你的合約背書</p>
+						<h3>詳細說明請看<a href="https://github.com/PeiGan/ytp2023/tree/main/contracts" target="_blank">此</a></h3>
 					</div>
 				</section>
 
