@@ -24,4 +24,10 @@ After installation, open terminal and cd to this folder, enter:
 node server.js
 ```
 
-Then open [this](http:\\localhost:5000\index.html) in your browser, you should be able to see the website.
+Then open
+
+```
+localhost:5000\index.html
+```
+
+ in your browser, you should be able to see the website.
