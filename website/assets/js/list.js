@@ -12445,7 +12445,7 @@ function showdata() {
                     <tr id="cool">
                         <td colspan="${7}">
                                 <p>智能合約地址：${data[i]['auditing_contract']}</p>
-                                <p><a href="https://goerli.etherscan.io/address/${data[i]['auditing_contract']}">在Etherscan中查看</a></p>
+                                <p><a href="https://goerli.etherscan.io/address/${data[i]['auditing_contract']}" target="_blank">在Etherscan中查看</a></p>
                             <a id="btn_invest${i}" class="button disabled alt small invest">入金</a>
                             <a id="btn_claim${i}" class="button disabled alt small claim">領取</a>
                         </td>
@@ -12455,7 +12455,7 @@ function showdata() {
                     <tr id="cool">
                         <td colspan="${7}">
                                 <p>智能合約地址：${data[i]['auditing_contract']}</p>
-                                <p><a href="https://goerli.etherscan.io/address/${data[i]['auditing_contract']}">在Etherscan中查看</a></p>
+                                <p><a href="https://goerli.etherscan.io/address/${data[i]['auditing_contract']}" target="_blank">在Etherscan中查看</a></p>
                             <a id="btn_invest${i}" class="button disabled alt small invest">入金</a>
                             <a id="btn_claim${i}" class="button alt small claim">領取</a>
                         </td>
@@ -12466,7 +12466,7 @@ function showdata() {
                 <tr id="cool">
                     <td colspan="${7}">
                             <p>智能合約地址：${data[i]['auditing_contract']}</p>
-                            <p><a href="https://goerli.etherscan.io/address/${data[i]['auditing_contract']}">在Etherscan中查看</a></p>
+                            <p><a href="https://goerli.etherscan.io/address/${data[i]['auditing_contract']}" target="_blank">在Etherscan中查看</a></p>
                         <a id="btn_invest${i}" class="button alt small invest">入金</a>
                         <a id="btn_claim${i}" class="button disabled alt small claim">領取</a>
                     </td>
