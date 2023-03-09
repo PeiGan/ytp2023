@@ -6,3 +6,6 @@ Our work of YTP 2023.
 Contains the core smart contract, the interface for contracts to be audited and an example.
 ### Website
 Our website running on node.js which can interact with smart contracts via MetaMask.
+
+## Usage
+Instructions are inside each folders' README.md.
