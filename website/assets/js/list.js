@@ -12611,7 +12611,7 @@ $('tbody').on('click', '.invest', function () {
     if(onChainData[pool_id]['is_pool_ended'] == 1) return;
     var money = prompt("你要入多少金(ETH)", "0.01");
     if(money==null) return;
-    invest(pool_id);
+    invest(money, pool_id);
 });
 $('tbody').on('click', '.claim', function () {
     var pool_id = this.id.substring(9);
