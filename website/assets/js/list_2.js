@@ -782,7 +782,7 @@ function EncodeTransactionData1(pool_id) {
     return "0x" + addEtherIntoPool_ID + pool_id;
 }
 function EncodeTransactionData2(pool_id) {
-    const claimReward_ID = "0xae169a5";
+    const claimReward_ID = "ae169a50";
     pool_id = pool_id.toString(16).padStart(64, "0");
     return "0x" + claimReward_ID + pool_id;
 }
