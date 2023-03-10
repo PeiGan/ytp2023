@@ -31,7 +31,7 @@ This function initiate a pool for your contract auditing.
 Parameters:
 * address audited_contract: your contract's address.
 * uint duration: the duration time (in second) of your contract auditing. When it reaches the duration and your contract isn't hacked, people who invest in your pool will be able to claim their reward.
-* address receiver: if the portion in your testContract function isn't 10000, then this address will receive the ether left when your contract is hacked.
+* address receiver: if the portion in your *testContract* function isn't 10000, then this address will receive the ether left when your contract is hacked.
 
 Also you will have to attach some ether when calling this function as your initial amount of this pool.
 
